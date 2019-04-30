@@ -26,6 +26,8 @@ func main() {
 	router.HandleFunc("/card/{id}", controllers.CardPostHandler).Methods("POST")
 	router.HandleFunc("/card", controllers.CardPutHandler).Methods("PUT")
 	router.HandleFunc("/card/{id}", controllers.CardDeleteHandler).Methods("DELETE")
+
+	router.HandleFunc("/shop", controllers.ShopsGetHandler).Methods("GET")
 	http.Handle("/", router)
 	http.ListenAndServe(":8081", nil)
 	println("hello")

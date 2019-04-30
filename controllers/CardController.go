@@ -55,6 +55,8 @@ func CardPutHandler(w http.ResponseWriter, r *http.Request){
 	println(card.CardName)
 	println(card.Description)
 	db.Create(card)
+	enc := json.NewEncoder(w)
+	enc.Encode(card)
 }
 
 func CardPostHandler(w http.ResponseWriter, r *http.Request){
@@ -65,6 +67,7 @@ func CardPostHandler(w http.ResponseWriter, r *http.Request){
 	println(id)
 	dec := json.NewDecoder(r.Body)
 	card := &models.Card{}
+
 	db.Debug().Where("card_name = $1", id).Debug().Find(&card)
 	if card.CardName == "" {
 		return
@@ -73,6 +76,9 @@ func CardPostHandler(w http.ResponseWriter, r *http.Request){
 	dec.Decode(card)
 	println(card.CardName)
 	db.Debug().Save(card)
+
+	enc := json.NewEncoder(w)
+	enc.Encode(card)
 }
 
 func CardDeleteHandler(w http.ResponseWriter, r *http.Request){
