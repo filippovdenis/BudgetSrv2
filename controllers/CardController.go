@@ -22,10 +22,12 @@ func SetDB(d *gorm.DB) {
 //func CardGetHandler(){
 func CardsGetHandler(w http.ResponseWriter, r *http.Request){
 	println("Method Get")
-	db = getDB()
-	var cards []models.Card
 
-	db.Find(&cards)
+	holder := GetRepoHolder()
+
+	cardRepo := holder.CardRepo
+
+	cards := cardRepo.GetCards()
 
 	enc := json.NewEncoder(w)
 	enc.Encode(&cards)
@@ -34,13 +36,14 @@ func CardsGetHandler(w http.ResponseWriter, r *http.Request){
 //func CardGetHandler(){
 func CardGetHandler(w http.ResponseWriter, r *http.Request){
 	println("Method Get")
-	db = getDB()
+
 	vars := mux.Vars(r)
 	id := vars["id"]
-	println(id)
-	var card models.Card
+	holder := GetRepoHolder()
 
-	db.Where("card_name = $1", id).Find(&card)
+	cardRepo := holder.CardRepo
+
+	card := cardRepo.GetCardByName(id)
 
 	enc := json.NewEncoder(w)
 	enc.Encode(&card)
@@ -48,13 +51,16 @@ func CardGetHandler(w http.ResponseWriter, r *http.Request){
 
 func CardPutHandler(w http.ResponseWriter, r *http.Request){
 	println("Method Put")
-	db = getDB()
+
 	dec := json.NewDecoder(r.Body)
 	card := &models.Card{}
 	dec.Decode(card)
-	println(card.CardName)
-	println(card.Description)
-	db.Create(card)
+
+	holder := GetRepoHolder()
+	cardRepo := holder.CardRepo
+
+	cardRepo.InsertCard(card)
+
 	enc := json.NewEncoder(w)
 	enc.Encode(card)
 }
@@ -67,15 +73,12 @@ func CardPostHandler(w http.ResponseWriter, r *http.Request){
 	println(id)
 	dec := json.NewDecoder(r.Body)
 	card := &models.Card{}
-
-	db.Debug().Where("card_name = $1", id).Debug().Find(&card)
-	if card.CardName == "" {
-		return
-	}
-
 	dec.Decode(card)
-	println(card.CardName)
-	db.Debug().Save(card)
+
+	holder := GetRepoHolder()
+	cardRepo := holder.CardRepo
+
+	cardRepo.UpdateCardByName(id, card)
 
 	enc := json.NewEncoder(w)
 	enc.Encode(card)
@@ -86,6 +89,8 @@ func CardDeleteHandler(w http.ResponseWriter, r *http.Request){
 	db = getDB()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	println(id)
-	db.Table("cards").Debug().Where("card_name= ?", id).Debug().Delete(&models.Card{})
+
+	holder := GetRepoHolder()
+	cardRepo := holder.CardRepo
+	cardRepo.DeleteCardByName(id)
 }

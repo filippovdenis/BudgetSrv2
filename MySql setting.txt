@@ -1,0 +1,15 @@
+\\dc2-backup01\StagingDBBackups\Esign_Test_02.bak
+
+	getCardByKey(string) *models.Card
+
+	InsertCard(*models.Card)
+
+	UpdateCardByName(string, *models.Card)
+
+	DeleteCardByName(string)
+	
+	
+	CardName string `gorm:"primary_key"`
+	
+	
+	"denis:tamplier@tcp(127.0.0.1:3306)/Budget"

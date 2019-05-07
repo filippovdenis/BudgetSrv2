@@ -4,13 +4,13 @@ import "BudgetSrv2/models"
 
 type CardRepo interface {
 
-	getCards() []models.Card
+	GetCards() []models.Card
 
-	getCardByKey(string) *models.Card
+	GetCardByName(string) *models.Card
 
-	insertCard(*models.Card)
+	InsertCard(*models.Card)
 
-	updateCardByKey(string, *models.Card)
+	UpdateCardByName(string, *models.Card)
 
-	deleteCardByKey(string)
+	DeleteCardByName(string)
 }

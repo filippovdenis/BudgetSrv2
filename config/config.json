@@ -1,0 +1,4 @@
+{
+  "DBType": "postgres",
+  "ConnectionString": "user=postgres password=tamplier dbname=Budget sslmode=disable"
+}
