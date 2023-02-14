@@ -49,10 +49,6 @@ func main() {
 	}
 
 
-
-
-
-
 	initDB(db)
 	defer db.Close()
 
